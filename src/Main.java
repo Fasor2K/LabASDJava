@@ -1,15 +1,7 @@
 public class Main {
     public static void main(String[] args){
-        double start,stop;
-        String s;
-        int period;
+        long t=PeriodNaive.averageTime(3);
 
-        s=GenerazioneStringhe.genera();
-
-        start=System.nanoTime();
-        period=PeriodNaive.calculatePeriod(s);
-        stop=System.nanoTime();
-
-        System.out.println("Periodo: "+period+"\nTempo impiegato: "+(stop-start));
+        System.out.println("Tempo medio: "+t+" Millisecondi");
     }
 }
