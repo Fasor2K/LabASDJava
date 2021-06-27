@@ -20,6 +20,10 @@ public class GenerazioneStringhe {
     }
      */
 
+    /**
+     *  Grazie all'overloading se il metodo genera viene chiamato senza parametri la lunghezza della stringa da generare viene determinata
+     *  in maniera randomica, se invece la lunghezza viene passata come parametro allora sarà generata una stringa di tale lunghezza
+     */
 
     public static String genera(){
         Random random=new Random();
