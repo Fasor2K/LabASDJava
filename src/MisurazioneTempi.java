@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class MisurazioneTempi {
@@ -98,5 +101,45 @@ public class MisurazioneTempi {
         }
 
         return Math.sqrt(standardDeviation/length);
+    }
+
+    public static void writeFile(String path,String text,boolean create){
+        File f=new File(path);
+        FileWriter fw;
+        int k=1,l;
+
+        if(create) {
+            while (f.exists()) { //Se il file esiste già cambia il nome del file aggiungendoci un'appendice "_k" finchè non trova un nome libero
+                if (path.contains(".")) {
+                    String[] arr = path.split(".");
+                    l = arr.length;
+                    arr[l - 2] += "_" + k + ".";
+                    path += arr[l - 2] + arr[l - 1];
+                } else {
+                    path += "_" + k;
+                }
+                k++;
+                f = new File(path);
+            }
+
+            try {
+                f.createNewFile();
+                fw = new FileWriter(f);
+                fw.write(text);
+            } catch (IOException e) {
+                System.out.println("ERRORE NELLA CREAZIONE DEL FILE");
+                e.printStackTrace();
+            }
+        }
+        else{
+            f=new File(path);
+            try {
+                fw=new FileWriter(path,true);
+                fw.write(text);
+            } catch (IOException e) {
+                System.out.println("ERRORE NELLA SCRITTURA DEL FILE");
+                e.printStackTrace();
+            }
+        }
     }
 }
