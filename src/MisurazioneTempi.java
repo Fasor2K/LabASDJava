@@ -47,6 +47,46 @@ public class MisurazioneTempi {
 
     }
 
+    public static void timesOnFile(Algortimo alg,int maxLength){
+        long start,stop,avg=0;
+        String s,fileName="";
+
+        if(alg.equals(Algortimo.NAIVE)) {
+            for(int i=1;i<=maxLength;i++){
+                s = GenerazioneStringhe.genera(i);
+
+                start = System.nanoTime();
+                PeriodNaive.calculatePeriod(s);
+                stop = System.nanoTime();
+                avg += (stop - start);
+                if(i==1) {
+                    fileName="TempiNaive.txt";
+                    fileName=writeFile(fileName, s.length() + " " + avg+"\n", true);
+                }
+                else{
+                    fileName=writeFile(fileName, s.length() + " " + avg+"\n", false);
+                }
+            }
+        }
+        else{
+            for(int i=1;i<=maxLength;i++){
+                s = GenerazioneStringhe.genera(i);
+
+                start = System.nanoTime();
+                PeriodSmart.calculatePeriod(s);
+                stop = System.nanoTime();
+                avg += (stop - start);
+                if(i==1) {
+                    fileName="TempiSmart.txt";
+                    fileName=writeFile(fileName, s.length() + " " + avg+"\n", true);
+                }
+                else{
+                    fileName=writeFile(fileName, s.length() + " " + avg+"\n", false);
+                }
+            }
+        }
+    }
+
     public static double standardDeviation(int length,Algortimo alg){
         long start,stop;
         final int misurazioni=100; //Numero di iterazioni da eseguire
@@ -103,7 +143,7 @@ public class MisurazioneTempi {
         return Math.sqrt(standardDeviation/length);
     }
 
-    public static void writeFile(String path,String text,boolean create){
+    private static String writeFile(String path,String text,boolean create){
         File f=new File(path);
         FileWriter fw;
         int k=1,l;
@@ -126,6 +166,7 @@ public class MisurazioneTempi {
                 f.createNewFile();
                 fw = new FileWriter(f);
                 fw.write(text);
+                fw.close();
             } catch (IOException e) {
                 System.out.println("ERRORE NELLA CREAZIONE DEL FILE");
                 e.printStackTrace();
@@ -136,10 +177,12 @@ public class MisurazioneTempi {
             try {
                 fw=new FileWriter(path,true);
                 fw.write(text);
+                fw.close();
             } catch (IOException e) {
                 System.out.println("ERRORE NELLA SCRITTURA DEL FILE");
                 e.printStackTrace();
             }
         }
+        return path;
     }
 }
