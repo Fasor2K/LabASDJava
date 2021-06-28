@@ -4,6 +4,6 @@ public class Main {
 
         //System.out.println("Deviazione standard: "+MisurazioneTempi.standardDeviation(100,Algortimo.NAIVE));
 
-        MisurazioneTempi.timesOnFile(Algortimo.NAIVE,5000);
+        MisurazioneTempi.timesOnFile(Algortimo.NAIVE,100);
     }
 }

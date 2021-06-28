@@ -25,6 +25,12 @@ public class GenerazioneStringhe {
      *  in maniera randomica, se invece la lunghezza viene passata come parametro allora sarà generata una stringa di tale lunghezza
      */
 
+    /**
+     * Metodo che genera stringhe casuali con alfabeto ternario {a,b,c} di lunghezza compresa tra 1000 e 500000.
+     * Itera length volte dove length è la lunghezza della stringa da generare, ad ogni iterazione genera un nuovo
+     * carattere della stringa in maniera casuale
+     * @return La stringa generata
+     */
     public static String genera(){
         Random random=new Random();
         String ret=""; //Stringa da generare
@@ -41,6 +47,10 @@ public class GenerazioneStringhe {
         return ret;
     }
 
+    /**
+     * Overloading del metodo genera(), funziona alla stessa maniera ma la lunghezza della stringa da generare
+     * viene passata come parametro
+     */
     public static String genera(int length){
         Random random=new Random();
         String ret=""; //Stringa da generare
