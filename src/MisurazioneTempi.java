@@ -64,7 +64,8 @@ public class MisurazioneTempi {
                 start = System.nanoTime();
                 PeriodNaive.calculatePeriod(s);
                 stop = System.nanoTime();
-                avg += (stop - start);
+                //avg=TimeUnit.NANOSECONDS.toMillis(stop-start);
+                avg=stop-start;
                 if(i==1) { //Scrivo su file la lunghezza della stringa affiancata al tempo di esecuzione dell'algoritmo, se sono alla prima iterazione creo il file
                     filePath="TempiNaive.txt"; //Questo è il percorso ipotetico del file, se però il file esiste già il nuovo percorso verrà ritornato dalla funzione writeFile
                     filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
@@ -81,7 +82,7 @@ public class MisurazioneTempi {
                 start = System.nanoTime();
                 PeriodSmart.calculatePeriod(s);
                 stop = System.nanoTime();
-                avg += (stop - start);
+                avg =stop - start;
                 if(i==1) {
                     filePath="TempiSmart.txt";
                     filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
