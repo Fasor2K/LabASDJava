@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 x = []
 y = []
-for line in open('TempiNaive.txt', 'r'):
+for line in open('TempiSmart.txt', 'r'):
     columns = [i for i in line.split()]
     x.append(columns[0])
     y.append(int(columns[1]))
