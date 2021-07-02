@@ -83,6 +83,8 @@ public class MisurazioneTempi {
                 PeriodSmart.calculatePeriod(s);
                 stop = System.nanoTime();
                 avg =stop - start;
+                //Chiamo manualmente il garbage collector al di fuori del calcolo dei tempi in modo da deallocare il vettore di interi che raggiunge dimensioni molto elevate
+                System.gc();
                 if(i==1) {
                     filePath="TempiSmart.txt";
                     filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
