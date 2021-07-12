@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 public class MisurazioneTempi {
 
     private static final double E=0.001;
+    private static final int ITERATIONS=100;
 
     /**
      * Calcola il tempo medio di esecuzione di un determinato algoritmo su stringhe generate casualmente di lunghezza casuale
@@ -46,6 +47,26 @@ public class MisurazioneTempi {
         avg/=iterations; //Calcolo il tempo medio di esecuzione
         avg= TimeUnit.NANOSECONDS.toMillis(avg); //Converto il risultato da nanosecondi a millisecondi
         return avg;
+    }
+
+    public static void timesOnFile(Algortimo alg){
+        long tmp;
+        String filePath="";
+        for(int i=1;i<=ITERATIONS;i++){
+            tmp=averageTime(alg);
+            if(i==1){
+                if(alg.equals(Algortimo.NAIVE)){
+                    filePath="TempiNaive.txt";
+                }
+                else{
+                    filePath="TempiSmart.txt";
+                }
+                filePath=writeFile(filePath,i+" "+tmp+"\n",true);
+            }
+            else{
+                filePath=writeFile(filePath,i+" "+tmp+"\n",false);
+            }
+        }
     }
 
     /**
