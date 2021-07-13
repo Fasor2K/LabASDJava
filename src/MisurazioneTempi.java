@@ -12,18 +12,17 @@ public class MisurazioneTempi {
      * Calcola il tempo medio di esecuzione di un determinato algoritmo su stringhe generate casualmente di lunghezza casuale
      * compresa tra 1000 e 500000
      * @param alg Algoritmo che si vuole utilizzare
-     * @return Tempo medio di esecuzione in millisecondi
+     * @return Tempo medio di esecuzione
      */
-    public static long averageTime(Algortimo alg){
+    public static String averageTime(Algortimo alg){
         long start,stop,avg=0;
         String s;
         double Tmin=getResolution()*((1/E)+1);
         int iterations=0;
 
         if(alg.equals(Algortimo.NAIVE)) {
+            s = GenerazioneStringhe.genera();
             do{
-                s = GenerazioneStringhe.genera(); //La procedura di generazione della striga è esclusa dal calcolo dei tempi
-
                 start = System.nanoTime();
                 PeriodNaive.calculatePeriod(s);
                 stop = System.nanoTime();
@@ -32,9 +31,8 @@ public class MisurazioneTempi {
             }while(avg<Tmin);
         }
         else{
+            s = GenerazioneStringhe.genera();
             do{
-                s = GenerazioneStringhe.genera(); //La procedura di generazione della striga è esclusa dal calcolo dei tempi
-
                 start = System.nanoTime();
                 PeriodSmart.calculatePeriod(s);
                 stop = System.nanoTime();
@@ -45,13 +43,12 @@ public class MisurazioneTempi {
 
 
         avg/=iterations; //Calcolo il tempo medio di esecuzione
-        avg= TimeUnit.NANOSECONDS.toMillis(avg); //Converto il risultato da nanosecondi a millisecondi
-        return avg;
+        //avg= TimeUnit.NANOSECONDS.toMillis(avg); //Converto il risultato da nanosecondi a millisecondi
+        return s.length()+" "+avg;
     }
 
     public static void timesOnFile(Algortimo alg){
-        long tmp;
-        String filePath="";
+        String filePath="",tmp;
         for(int i=1;i<=ITERATIONS;i++){
             tmp=averageTime(alg);
             if(i==1){
@@ -60,11 +57,12 @@ public class MisurazioneTempi {
                 }
                 else{
                     filePath="TempiSmart.txt";
+                    System.gc();
                 }
-                filePath=writeFile(filePath,i+" "+tmp+"\n",true);
+                filePath=writeFile(filePath,tmp+"\n",true);
             }
             else{
-                filePath=writeFile(filePath,i+" "+tmp+"\n",false);
+                filePath=writeFile(filePath,tmp+"\n",false);
             }
         }
     }
