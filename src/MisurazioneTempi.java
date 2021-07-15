@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class MisurazioneTempi {
 
-    private static final double E=0.001,R=getResolution();
+    private static final double E=0.001;
     private static final int ITERATIONS=100;
 
 
@@ -15,9 +15,9 @@ public class MisurazioneTempi {
      * @return Tempo medio di esecuzione
      */
     public static String averageTime(Algortimo alg,int i){
-        long start,stop,avg=0;
+        long start,stop,avg;
         String s;
-        double Tmin=R*((1/E)+1),A=1000,B=1.064785978;
+        double R=getResolution(),Tmin=R*((1/E)+1),A=1000,B=1.064785978;
         int iterations=0,n;
 
         start = System.nanoTime();
