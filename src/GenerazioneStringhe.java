@@ -30,7 +30,7 @@ public class GenerazioneStringhe {
      * Itera length volte dove length è la lunghezza della stringa da generare, ad ogni iterazione genera un nuovo
      * carattere della stringa in maniera casuale
      * @return La stringa generata
-     */
+     *
     public static String genera(){
         Random random=new Random();
         String ret=""; //Stringa da generare
@@ -45,7 +45,7 @@ public class GenerazioneStringhe {
         }
 
         return ret;
-    }
+    }*/
 
     /**
      * Overloading del metodo genera(), funziona alla stessa maniera ma la lunghezza della stringa da generare

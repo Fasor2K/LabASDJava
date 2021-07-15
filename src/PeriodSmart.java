@@ -1,8 +1,8 @@
 public class PeriodSmart {
+        private static int[] r= new int[500001];
         public static int calculatePeriod(String s){
             int n =s.length();
             int z,tmp;
-            int[] r= new int[n+1];
             r[0]=0; r[1]=0;
             for(int i=2; i<=n; i++){
                 z= r[i-1];
@@ -15,7 +15,6 @@ public class PeriodSmart {
                     r[i]=0;
             }
             tmp=r[n];
-            r=null;
             return n - tmp;
         }
 }

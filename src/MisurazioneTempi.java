@@ -1,12 +1,12 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class MisurazioneTempi {
 
     private static final double E=0.001;
     private static final int ITERATIONS=100;
+
 
     /**
      * Calcola il tempo medio di esecuzione di un determinato algoritmo su stringhe generate casualmente di lunghezza casuale
@@ -14,14 +14,13 @@ public class MisurazioneTempi {
      * @param alg Algoritmo che si vuole utilizzare
      * @return Tempo medio di esecuzione
      */
-    public static String averageTime(Algortimo alg){
+    public static String averageTime(Algortimo alg,String s){
         long start,stop,avg=0;
-        String s;
         double Tmin=getResolution()*((1/E)+1);
         int iterations=0;
 
+
         if(alg.equals(Algortimo.NAIVE)) {
-            s = GenerazioneStringhe.genera();
             do{
                 start = System.nanoTime();
                 PeriodNaive.calculatePeriod(s);
@@ -31,7 +30,6 @@ public class MisurazioneTempi {
             }while(avg<Tmin);
         }
         else{
-            s = GenerazioneStringhe.genera();
             do{
                 start = System.nanoTime();
                 PeriodSmart.calculatePeriod(s);
@@ -47,17 +45,69 @@ public class MisurazioneTempi {
         return s.length()+" "+avg;
     }
 
+    /**
     public static void timesOnFile(Algortimo alg){
-        String filePath="",tmp;
-        for(int i=1;i<=ITERATIONS;i++){
-            tmp=averageTime(alg);
-            if(i==1){
+        long start,stop,avg=0;
+        String s,filePath="";
+        int n;
+        double A=1000;
+        double B=1.064785978;
+        if(alg.equals(Algortimo.NAIVE)) {
+            for(int i=0;i<100;i++){
+                n=(int) (A*Math.pow(B,i));
+                s = GenerazioneStringhe.genera(n);
+
+                start = System.nanoTime();
+                PeriodNaive.calculatePeriod(s);
+                stop = System.nanoTime();
+                //avg=TimeUnit.NANOSECONDS.toMillis(stop-start);
+                avg=stop-start;
+                if(i==1) { //Scrivo su file la lunghezza della stringa affiancata al tempo di esecuzione dell'algoritmo, se sono alla prima iterazione creo il file
+                    filePath="TempiNaive.txt"; //Questo è il percorso ipotetico del file, se però il file esiste già il nuovo percorso verrà ritornato dalla funzione writeFile
+                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
+                }
+                else{
+                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", false);
+                }
+            }
+        }
+        else{
+            for(int i=0;i<100;i++){
+                n=(int) (A*Math.pow(B,i));
+                s = GenerazioneStringhe.genera(n);
+
+                start = System.nanoTime();
+                PeriodSmart.calculatePeriod(s);
+                stop = System.nanoTime();
+                avg =stop - start;
+                //Chiamo manualmente il garbage collector al di fuori del calcolo dei tempi in modo da deallocare il vettore di interi che raggiunge dimensioni molto elevate
+                System.gc();
+                if(i==1) {
+                    filePath="TempiSmart.txt";
+                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
+                }
+                else{
+                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", false);
+                }
+            }
+        }
+    }*/
+
+    public static void timesOnFile(Algortimo alg){
+        String filePath="",tmp,s;
+        double A=1000;
+        double B=1.064785978;
+        int n;
+        for(int i=0;i<ITERATIONS;i++){
+            n= (int) (A*Math.pow(B,i));
+            s=GenerazioneStringhe.genera(n);
+            tmp=averageTime(alg,s);
+            if(i==0){
                 if(alg.equals(Algortimo.NAIVE)){
                     filePath="TempiNaive.txt";
                 }
                 else{
                     filePath="TempiSmart.txt";
-                    System.gc();
                 }
                 filePath=writeFile(filePath,tmp+"\n",true);
             }
@@ -71,7 +121,7 @@ public class MisurazioneTempi {
      * Scrive su file i tempi di esecuzione di un determinato algoritmo con la relativa lunghezza della stringa considerata
      * @param alg tipo di algoritmo da utilizzare
      * @param maxLength proverò stringhe lunghe da 1 a maxLength (passando una volta tutte le lunghezze)
-     */
+     *
     public static void timesOnFile(Algortimo alg,int maxLength){
         long start,stop,avg=0;
         String s,filePath="";
@@ -113,7 +163,7 @@ public class MisurazioneTempi {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Calcola la deviazione standard dei risultati di un determinato algoritmo, testato con un numero prefissato di stringhe
