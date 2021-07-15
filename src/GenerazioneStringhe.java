@@ -25,7 +25,7 @@ public class GenerazioneStringhe {
      *  in maniera randomica, se invece la lunghezza viene passata come parametro allora sarà generata una stringa di tale lunghezza
      */
 
-    /**
+    /*
      * Metodo che genera stringhe casuali con alfabeto ternario {a,b,c} di lunghezza compresa tra 1000 e 500000.
      * Itera length volte dove length è la lunghezza della stringa da generare, ad ogni iterazione genera un nuovo
      * carattere della stringa in maniera casuale
@@ -64,5 +64,21 @@ public class GenerazioneStringhe {
         }
 
         return ret;
+    }
+
+    /**
+     * Genera una stringa con caratteri appartenenti all'alfabeto delimitato dagli interi leftLimit e rightLimit
+     * interpretati come codici ASCII
+     * @param length Lunghezza della stringa da generare
+     * @return Stringa generata randomicamente
+     */
+    public static String generaLineare(int length){
+        int leftLimit=97,rightLimit=99;
+        Random random=new Random();
+
+        return random.ints(leftLimit,rightLimit+1)
+                .limit(length)
+                .collect(StringBuilder::new,StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }

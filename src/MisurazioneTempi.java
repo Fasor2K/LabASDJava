@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class MisurazioneTempi {
 
-    private static final double E=0.001;
+    private static final double E=0.001,R=getResolution();
     private static final int ITERATIONS=100;
 
 
@@ -14,38 +14,40 @@ public class MisurazioneTempi {
      * @param alg Algoritmo che si vuole utilizzare
      * @return Tempo medio di esecuzione
      */
-    public static String averageTime(Algortimo alg,String s){
+    public static String averageTime(Algortimo alg,int i){
         long start,stop,avg=0;
-        double Tmin=getResolution()*((1/E)+1);
-        int iterations=0;
+        String s;
+        double Tmin=R*((1/E)+1),A=1000,B=1.064785978;
+        int iterations=0,n;
 
+        start = System.nanoTime();
 
         if(alg.equals(Algortimo.NAIVE)) {
             do{
-                start = System.nanoTime();
+                n= (int) (A*Math.pow(B,i));
+                s=GenerazioneStringhe.generaLineare(n);
                 PeriodNaive.calculatePeriod(s);
                 stop = System.nanoTime();
-                avg += (stop - start);
                 iterations++;
-            }while(avg<Tmin);
+            }while((stop-start)<Tmin);
         }
         else{
             do{
-                start = System.nanoTime();
+                n= (int) (A*Math.pow(B,i));
+                s=GenerazioneStringhe.generaLineare(n);
                 PeriodSmart.calculatePeriod(s);
                 stop = System.nanoTime();
-                avg += (stop - start);
                 iterations++;
-            }while(avg<Tmin);
+            }while((stop-start)<Tmin);
         }
 
 
-        avg/=iterations; //Calcolo il tempo medio di esecuzione
+        avg=(stop-start)/iterations; //Calcolo il tempo medio di esecuzione
         //avg= TimeUnit.NANOSECONDS.toMillis(avg); //Converto il risultato da nanosecondi a millisecondi
         return s.length()+" "+avg;
     }
 
-    /**
+    /*
     public static void timesOnFile(Algortimo alg){
         long start,stop,avg=0;
         String s,filePath="";
@@ -94,14 +96,9 @@ public class MisurazioneTempi {
     }*/
 
     public static void timesOnFile(Algortimo alg){
-        String filePath="",tmp,s;
-        double A=1000;
-        double B=1.064785978;
-        int n;
+        String filePath="",tmp;
         for(int i=0;i<ITERATIONS;i++){
-            n= (int) (A*Math.pow(B,i));
-            s=GenerazioneStringhe.genera(n);
-            tmp=averageTime(alg,s);
+            tmp=averageTime(alg,i);
             if(i==0){
                 if(alg.equals(Algortimo.NAIVE)){
                     filePath="TempiNaive.txt";
@@ -117,7 +114,7 @@ public class MisurazioneTempi {
         }
     }
 
-    /**
+    /*
      * Scrive su file i tempi di esecuzione di un determinato algoritmo con la relativa lunghezza della stringa considerata
      * @param alg tipo di algoritmo da utilizzare
      * @param maxLength proverò stringhe lunghe da 1 a maxLength (passando una volta tutte le lunghezze)
