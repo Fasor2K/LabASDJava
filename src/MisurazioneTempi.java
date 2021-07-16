@@ -14,14 +14,57 @@ public class MisurazioneTempi {
      * @param alg Algoritmo che si vuole utilizzare
      * @return Tempo medio di esecuzione
      */
-    public static String averageTime(Algortimo alg,int i){
-        long start,stop,avg;
-        String s;
-        double R=getResolution(),Tmin=R*((1/E)+1),A=1000,B=1.064785978;
-        int iterations=0,n;
+    public static void timesOnFile(Algortimo alg){
+        long start,stop;
+        double A=1000,R;
+        int n,k=0;
+        String tmp,s,filePath="";
 
-        start = System.nanoTime();
+        double B=Math.pow(Math.E, (Math.log(500000)-Math.log(A))/(ITERATIONS-1));
 
+        //Il tempo medio di esecuzione viene calcolato 100 volte con stringhe di lunghezza diversa (da 1000 a 500000)
+        for(int i=0;i<ITERATIONS;i++){
+            R=getResolution();
+            k=0; //Iterazioni interne fatte per superare il tempo minimo misurabile
+            n= (int) (A*Math.pow(B,i)); //Lunghezza stringa
+
+            start=System.nanoTime();
+
+            //Il ciclo do-while esegue l'algoritmo finchè il tempo misurato non supera quello minimo misurabile
+            do{
+                s=GenerazioneStringhe.generaLineare(n);
+                if(alg.equals(Algortimo.NAIVE)){
+                    PeriodNaive.calculatePeriod(s);
+                }
+                else{
+                    PeriodSmart.calculatePeriod(s);
+                }
+                stop=System.nanoTime();
+                k++;
+            }while((stop-start)<(R/E)+R);
+
+            tmp=n+" "+(stop-start)/k;
+
+            if(i==0){ //Se ci troviamo nella prima iterazione creo il file ponendo a true il parametro booleano della funzione writeFile
+                if(alg.equals(Algortimo.NAIVE)){
+                    filePath="TempiNaive.txt";
+                }
+                else{
+                    filePath="TempiSmart.txt";
+                }
+                filePath=writeFile(filePath,tmp+"\n",true);
+            }
+            else{
+                filePath=writeFile(filePath,tmp+"\n",false);
+            }
+            /*
+            filePath rappresenta inizialmente il nome del file desiderato, tuttavia,
+            il file potrebbe già esistere quindi il nome effettivo sarà quello restituito
+            dalla funzione writeFile al momento della creazione del file stesso
+             */
+        }
+
+        /*
         if(alg.equals(Algortimo.NAIVE)) {
             do{
                 n= (int) (A*Math.pow(B,i));
@@ -39,12 +82,7 @@ public class MisurazioneTempi {
                 stop = System.nanoTime();
                 iterations++;
             }while((stop-start)<Tmin);
-        }
-
-
-        avg=(stop-start)/iterations; //Calcolo il tempo medio di esecuzione
-        //avg= TimeUnit.NANOSECONDS.toMillis(avg); //Converto il risultato da nanosecondi a millisecondi
-        return s.length()+" "+avg;
+        }*/
     }
 
     /*
@@ -95,6 +133,7 @@ public class MisurazioneTempi {
         }
     }*/
 
+    /*
     public static void timesOnFile(Algortimo alg){
         String filePath="",tmp;
         for(int i=0;i<ITERATIONS;i++){
@@ -112,7 +151,7 @@ public class MisurazioneTempi {
                 filePath=writeFile(filePath,tmp+"\n",false);
             }
         }
-    }
+    }*/
 
     /*
      * Scrive su file i tempi di esecuzione di un determinato algoritmo con la relativa lunghezza della stringa considerata
@@ -179,7 +218,7 @@ public class MisurazioneTempi {
 
         if(alg.equals(Algortimo.NAIVE)){
             for(int i=0;i<misurazioni;i++){
-                s = GenerazioneStringhe.genera(length); //Genero stringhe di una lunghezza prefissata, passata come parametro
+                s = GenerazioneStringhe.generaLineare(length); //Genero stringhe di una lunghezza prefissata, passata come parametro
 
                 start = System.nanoTime();
                 PeriodNaive.calculatePeriod(s);
@@ -189,7 +228,7 @@ public class MisurazioneTempi {
         }
         else {
             for(int i=0;i<misurazioni;i++){
-                s = GenerazioneStringhe.genera(length);
+                s = GenerazioneStringhe.generaLineare(length);
 
                 start = System.nanoTime();
                 PeriodSmart.calculatePeriod(s);
