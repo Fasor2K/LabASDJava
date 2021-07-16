@@ -14,48 +14,45 @@ public class MisurazioneTempi {
      * @param alg Algoritmo che si vuole utilizzare
      * @return Tempo medio di esecuzione
      */
-    public static void timesOnFile(Algortimo alg){
-        long start,stop;
-        double A=1000,R;
-        int n,k=0;
-        String tmp,s,filePath="";
+    public static void timesOnFile(Algortimo alg) {
+        long start, stop;
+        double A = 1000, R;
+        int n, k = 0;
+        String tmp, s, filePath = "";
 
-        double B=Math.pow(Math.E, (Math.log(500000)-Math.log(A))/(ITERATIONS-1));
+        double B = Math.pow(Math.E, (Math.log(500000) - Math.log(A)) / (ITERATIONS - 1));
 
         //Il tempo medio di esecuzione viene calcolato 100 volte con stringhe di lunghezza diversa (da 1000 a 500000)
-        for(int i=0;i<ITERATIONS;i++){
-            R=getResolution();
-            k=0; //Iterazioni interne fatte per superare il tempo minimo misurabile
-            n= (int) (A*Math.pow(B,i)); //Lunghezza stringa
+        for (int i = 0; i < ITERATIONS; i++) {
+            R = getResolution();
+            k = 0; //Iterazioni interne fatte per superare il tempo minimo misurabile
+            n = (int) (A * Math.pow(B, i)); //Lunghezza stringa
 
-            start=System.nanoTime();
+            start = System.nanoTime();
 
             //Il ciclo do-while esegue l'algoritmo finchè il tempo misurato non supera quello minimo misurabile
-            do{
-                s=GenerazioneStringhe.generaLineare(n);
-                if(alg.equals(Algortimo.NAIVE)){
+            do {
+                s = GenerazioneStringhe.generaLineare(n);
+                if (alg.equals(Algortimo.NAIVE)) {
                     PeriodNaive.calculatePeriod(s);
-                }
-                else{
+                } else {
                     PeriodSmart.calculatePeriod(s);
                 }
-                stop=System.nanoTime();
+                stop = System.nanoTime();
                 k++;
-            }while((stop-start)<(R/E)+R);
+            } while ((stop - start) < (R / E) + R);
 
-            tmp=n+" "+(stop-start)/k;
+            tmp = n + " " + (stop - start) / k;
 
-            if(i==0){ //Se ci troviamo nella prima iterazione creo il file ponendo a true il parametro booleano della funzione writeFile
-                if(alg.equals(Algortimo.NAIVE)){
-                    filePath="TempiNaive.txt";
+            if (i == 0) { //Se ci troviamo nella prima iterazione creo il file ponendo a true il parametro booleano della funzione writeFile
+                if (alg.equals(Algortimo.NAIVE)) {
+                    filePath = "TempiNaive.txt";
+                } else {
+                    filePath = "TempiSmart.txt";
                 }
-                else{
-                    filePath="TempiSmart.txt";
-                }
-                filePath=writeFile(filePath,tmp+"\n",true);
-            }
-            else{
-                filePath=writeFile(filePath,tmp+"\n",false);
+                filePath = writeFile(filePath, tmp + "\n", true);
+            } else {
+                filePath = writeFile(filePath, tmp + "\n", false);
             }
             /*
             filePath rappresenta inizialmente il nome del file desiderato, tuttavia,
@@ -63,143 +60,7 @@ public class MisurazioneTempi {
             dalla funzione writeFile al momento della creazione del file stesso
              */
         }
-
-        /*
-        if(alg.equals(Algortimo.NAIVE)) {
-            do{
-                n= (int) (A*Math.pow(B,i));
-                s=GenerazioneStringhe.generaLineare(n);
-                PeriodNaive.calculatePeriod(s);
-                stop = System.nanoTime();
-                iterations++;
-            }while((stop-start)<Tmin);
-        }
-        else{
-            do{
-                n= (int) (A*Math.pow(B,i));
-                s=GenerazioneStringhe.generaLineare(n);
-                PeriodSmart.calculatePeriod(s);
-                stop = System.nanoTime();
-                iterations++;
-            }while((stop-start)<Tmin);
-        }*/
     }
-
-    /*
-    public static void timesOnFile(Algortimo alg){
-        long start,stop,avg=0;
-        String s,filePath="";
-        int n;
-        double A=1000;
-        double B=1.064785978;
-        if(alg.equals(Algortimo.NAIVE)) {
-            for(int i=0;i<100;i++){
-                n=(int) (A*Math.pow(B,i));
-                s = GenerazioneStringhe.genera(n);
-
-                start = System.nanoTime();
-                PeriodNaive.calculatePeriod(s);
-                stop = System.nanoTime();
-                //avg=TimeUnit.NANOSECONDS.toMillis(stop-start);
-                avg=stop-start;
-                if(i==1) { //Scrivo su file la lunghezza della stringa affiancata al tempo di esecuzione dell'algoritmo, se sono alla prima iterazione creo il file
-                    filePath="TempiNaive.txt"; //Questo è il percorso ipotetico del file, se però il file esiste già il nuovo percorso verrà ritornato dalla funzione writeFile
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
-                }
-                else{
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", false);
-                }
-            }
-        }
-        else{
-            for(int i=0;i<100;i++){
-                n=(int) (A*Math.pow(B,i));
-                s = GenerazioneStringhe.genera(n);
-
-                start = System.nanoTime();
-                PeriodSmart.calculatePeriod(s);
-                stop = System.nanoTime();
-                avg =stop - start;
-                //Chiamo manualmente il garbage collector al di fuori del calcolo dei tempi in modo da deallocare il vettore di interi che raggiunge dimensioni molto elevate
-                System.gc();
-                if(i==1) {
-                    filePath="TempiSmart.txt";
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
-                }
-                else{
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", false);
-                }
-            }
-        }
-    }*/
-
-    /*
-    public static void timesOnFile(Algortimo alg){
-        String filePath="",tmp;
-        for(int i=0;i<ITERATIONS;i++){
-            tmp=averageTime(alg,i);
-            if(i==0){
-                if(alg.equals(Algortimo.NAIVE)){
-                    filePath="TempiNaive.txt";
-                }
-                else{
-                    filePath="TempiSmart.txt";
-                }
-                filePath=writeFile(filePath,tmp+"\n",true);
-            }
-            else{
-                filePath=writeFile(filePath,tmp+"\n",false);
-            }
-        }
-    }*/
-
-    /*
-     * Scrive su file i tempi di esecuzione di un determinato algoritmo con la relativa lunghezza della stringa considerata
-     * @param alg tipo di algoritmo da utilizzare
-     * @param maxLength proverò stringhe lunghe da 1 a maxLength (passando una volta tutte le lunghezze)
-     *
-    public static void timesOnFile(Algortimo alg,int maxLength){
-        long start,stop,avg=0;
-        String s,filePath="";
-
-        if(alg.equals(Algortimo.NAIVE)) {
-            for(int i=1;i<=maxLength;i++){
-                s = GenerazioneStringhe.genera(i);
-
-                start = System.nanoTime();
-                PeriodNaive.calculatePeriod(s);
-                stop = System.nanoTime();
-                //avg=TimeUnit.NANOSECONDS.toMillis(stop-start);
-                avg=stop-start;
-                if(i==1) { //Scrivo su file la lunghezza della stringa affiancata al tempo di esecuzione dell'algoritmo, se sono alla prima iterazione creo il file
-                    filePath="TempiNaive.txt"; //Questo è il percorso ipotetico del file, se però il file esiste già il nuovo percorso verrà ritornato dalla funzione writeFile
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
-                }
-                else{
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", false);
-                }
-            }
-        }
-        else{
-            for(int i=1;i<=maxLength;i++){
-                s = GenerazioneStringhe.genera(i);
-
-                start = System.nanoTime();
-                PeriodSmart.calculatePeriod(s);
-                stop = System.nanoTime();
-                avg =stop - start;
-                //Chiamo manualmente il garbage collector al di fuori del calcolo dei tempi in modo da deallocare il vettore di interi che raggiunge dimensioni molto elevate
-                System.gc();
-                if(i==1) {
-                    filePath="TempiSmart.txt";
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", true);
-                }
-                else{
-                    filePath=writeFile(filePath, s.length() + " " + avg+"\n", false);
-                }
-            }
-        }
-    }*/
 
     /**
      * Calcola la deviazione standard dei risultati di un determinato algoritmo, testato con un numero prefissato di stringhe
